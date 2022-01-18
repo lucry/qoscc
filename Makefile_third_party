@@ -1,0 +1,23 @@
+DIRS = src cubic QoSCC core app
+TARGETS = all clean install
+TESTTARGETS = test
+CROSS =
+CC = $(CROSS)gcc
+CXX = $(CROSS)g++
+CINCLUDES = -I/home/qqcai/anaconda3/include/python3.8/
+DEBUG = -g -O2
+CFLAGS = $(DEBUG) -Wall -O2 $(CINCLUDES)
+RM = rm -rf
+
+LIB_PATH = -L /home/qqcai/anaconda3/lib/
+
+LIBS = -ldiv
+
+$(TARGETS): %: $(patsubst %, %.%, $(DIRS))
+	$(CXX) $^ -o $@ $(LIB_PATH) $(LIBS)
+
+$(patsubst %.cpp, %.o, $(DIRS)):%.o : %.cpp
+	$(CXX) $(CFLAGS) $< -o $@ $(HEADER_PATH)
+
+$(foreach TGT, $(TARGETS), $(patsubst %, %.$(TGT), $(DIRS))):
+	$(MAKE) -C $(subst ., , $@)
