@@ -76,7 +76,7 @@ const int32_t CMsgNo::m_iMsgNoTH = 0xFFFFFFF;
 const int32_t CMsgNo::m_iMaxMsgNo = 0x1FFFFFFF;
 
 const int CUDT::m_iVersion = 4;
-const int CUDT::m_iSYNInterval = 100;
+const int CUDT::m_iSYNInterval = 100; //modified by cqq, 10000->100
 const int CUDT::m_iSelfClockInterval = 64;
 
 
@@ -100,15 +100,15 @@ CUDT::CUDT()
    initSynch();
 
    // Default UDT configurations
-   m_iMSS = 1500;
+   m_iMSS = 1464; //modified by cqq 1500->1464
    m_bSynSending = true;
    m_bSynRecving = true;
-   m_iFlightFlagSize = 25600; //Flow window size
-   m_iSndBufSize = 8192;
-   m_iRcvBufSize = 8192; //Rcv buffer MUST NOT be bigger than Flight Flag size
+   m_iFlightFlagSize = 100000; //Flow window size, modified by cqq 25600->100000
+   m_iSndBufSize = 100000;    //modified by cqq 8192->100000
+   m_iRcvBufSize = 100000; //Rcv buffer MUST NOT be bigger than Flight Flag size, modified by cqq 8192->100000
    m_Linger.l_onoff = 1;
    m_Linger.l_linger = 180;
-    m_iUDPSndBufSize = 65536;
+    m_iUDPSndBufSize = 100000;   //modified by cqq 65536->100000
    m_iUDPRcvBufSize = m_iRcvBufSize * m_iMSS;
    m_iSockType = UDT_STREAM;
    m_iIPversion = AF_INET;

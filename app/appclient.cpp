@@ -48,7 +48,7 @@ void* PYThread(void *arg){
    cout << "Appclient: Start building python agent..." << endl;
    char cmd[100];
 //   cout << "cmd is: " << endl;
-   sprintf(cmd, "python ../QoSCC/py_agent.py --sh_key=%d --sh_key_rl=%d", sh_key, sh_key_rl);
+   sprintf(cmd, "python3.7 ../QoSCC/py_agent.py --sh_key=%d --sh_key_rl=%d", sh_key, sh_key_rl);
 //   cout << cmd << endl;
    system(cmd);
 }

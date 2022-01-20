@@ -50,7 +50,7 @@ written by
 class CSndBuffer
 {
 public:
-   CSndBuffer(int size = 32, int mss = 1500);
+   CSndBuffer(int size = 32, int mss = 1464); //modified by cqq, 1500->1464
    ~CSndBuffer();
 
       // Functionality:

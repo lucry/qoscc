@@ -161,10 +161,10 @@ class PY_Agent:
             trace_rate = s0[4]
             reward =  s0[5]
             sending_period = s0[6]
-            cap_bw, cap_rtt = self.predict_network(max_thr, min_rtt)
+            cap_bw = self.predict_network(max_thr)
             state[0] = max_thr
             state = np.append(state, [min_rtt])
-            # state = np.append(state, [cap_bw])
+            state = np.append(state, [cap_bw])
             # state = np.append(state, [cap_rtt])
             state = np.append(state, [trace_rate])
             state = np.append(state, [loss])
@@ -208,15 +208,21 @@ class PY_Agent:
         pass
 
 
-    def predict_network(self, max_thr, min_rtt):
-        self.lstm_model.store([max_thr, min_rtt])
+    # def predict_network(self, max_thr, min_rtt):
+    #     self.lstm_model.store([max_thr, min_rtt])
+    #     res = self.lstm_model.predict()
+    #     cap_thr = res[0][0]
+    #     cap_rtt = res[0][1]
+    #     # print("cap_thr is: ", cap_thr)
+    #     # print("cap_rtt is: ", cap_rtt)
+    #     return cap_thr, cap_rtt
+
+    def predict_network(self, max_thr):
+        self.lstm_model.store([max_thr])
         res = self.lstm_model.predict()
         cap_thr = res[0][0]
-        cap_rtt = res[0][1]
         # print("cap_thr is: ", cap_thr)
-        # print("cap_rtt is: ", cap_rtt)
-        return cap_thr, cap_rtt
-
+        return cap_thr
 
     def get_action(self, s1, ack, error_code):
         # logging.basicConfig(level=logging.INFO, filename='state.log', filemode='w',

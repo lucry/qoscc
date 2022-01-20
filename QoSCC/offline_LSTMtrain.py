@@ -11,9 +11,10 @@ from model import *
 
 class Config:
     # 数据参数
-    feature_columns = list(range(0, 2))
-    label_columns = [0, 1]
+    feature_columns = [0]
+    label_columns = [0]
     label_in_feature_index = (lambda x, y: [x.index(i) for i in y])(feature_columns, label_columns)  # 因为feature不一定从0开始
+    scale_infactor = 5
 
     predict_day = 1  # 预测未来几天
 
@@ -40,7 +41,7 @@ class Config:
     # batch_size = 64->32
     batch_size = 16  # 一次训练所抓取的数据样本数量
     learning_rate = 0.001
-    epoch = 4  # 原来为20->80，整个训练集被训练多少遍，不考虑早停的前提下
+    epoch = 50  # 原来为20->80，整个训练集被训练多少遍，不考虑早停的前提下
     patience = 50  # 训练多少epoch，验证集没提升就停掉，早停参数
     random_seed = 42  # 随机种子，保证可复现
 
@@ -63,7 +64,7 @@ class Config:
 
     # 路径参数
     train_data = "./data/lb-tput-rtt-notime.csv"
-    train_data_path_add_train = "./data/mobb-tput-rtt-notime.csv"
+    # train_data_path_add_train = "./data/mobb-tput-rtt-notime.csv"
     # train_data_path = "./data/stock_data.csv"
     model_save_path = "./checkpoint/" + used_frame + "/"
     figure_save_path = "./figure/"
@@ -149,12 +150,12 @@ class Data:
                 # print("line is: ", line)
                 if (len(line)>1):
                     data = [float(i) for i in line]
-                    values.append(data)
+                    values.append([data[0]/config.scale_infactor])
                 else:
                     break
         # print("values are: ", values)
         values = np.array(values, float)
-        return values,label
+        return values,label[0]
 
 
     def get_train_and_valid_data(self):
@@ -328,31 +329,31 @@ if __name__ == "__main__":
 
 
 
-        if config.do_predict:
-            # valid_X, valid_Y = data_gainer.get_test_data(return_label_data=True)
-            # print(valid_X)
-
-            params.dict["dropout_rate"] = 0  # 预测模式要调为1
-
-            tf.reset_default_graph()  # 清除默认图的堆栈，并设置全局图为默认图
-            with tf.variable_scope("stock_predict", reuse=tf.AUTO_REUSE):  # 共享变量
-                model = LSTMNetwork(params, False)
-
-            test_len = len(valid_X)
-            with tf.Session() as sess:  # session是客户端与整个TensorFlow系统交互的接口
-                module_file = tf.train.latest_checkpoint(config.model_save_path)
-                model.saver.restore(sess, module_file)
-
-                result = np.zeros((test_len, config.output_size))  # np.zeros((2, 1)) 生成两行一列的0矩阵
-                for step in range(test_len):
-                    feed_dict = {model.X: valid_X[step: (step + 1)]}
-                    test_pred = sess.run(model.pred, feed_dict=feed_dict)
-                    result[step: (step + 1)] = test_pred[0, :, :]
-
-            # print("np.shape(valid_Y) is: ", np.shape(valid_Y))
-            # print("np.shape(result) is: ", np.shape(result))
-            valid_Y = np.reshape(valid_Y, [test_len, config.output_size])
-            draw(config, data_gainer, logger, valid_Y, result)
+        # if config.do_predict:
+        #     # valid_X, valid_Y = data_gainer.get_test_data(return_label_data=True)
+        #     # print(valid_X)
+        #
+        #     params.dict["dropout_rate"] = 0  # 预测模式要调为1
+        #
+        #     tf.reset_default_graph()  # 清除默认图的堆栈，并设置全局图为默认图
+        #     with tf.variable_scope("stock_predict", reuse=tf.AUTO_REUSE):  # 共享变量
+        #         model = LSTMNetwork(params, False)
+        #
+        #     test_len = len(valid_X)
+        #     with tf.Session() as sess:  # session是客户端与整个TensorFlow系统交互的接口
+        #         module_file = tf.train.latest_checkpoint(config.model_save_path)
+        #         model.saver.restore(sess, module_file)
+        #
+        #         result = np.zeros((test_len, config.output_size))  # np.zeros((2, 1)) 生成两行一列的0矩阵
+        #         for step in range(test_len):
+        #             feed_dict = {model.X: valid_X[step: (step + 1)]}
+        #             test_pred = sess.run(model.pred, feed_dict=feed_dict)
+        #             result[step: (step + 1)] = test_pred[0, :, :]
+        #
+        #     # print("np.shape(valid_Y) is: ", np.shape(valid_Y))
+        #     # print("np.shape(result) is: ", np.shape(result))
+        #     valid_Y = np.reshape(valid_Y, [test_len, config.output_size])
+        #     draw(config, data_gainer, logger, valid_Y, result)
 
     except Exception:
         logger.error("Run Error", exc_info=True)

@@ -1,4 +1,4 @@
-DIRS = src tcpabstract cubic QoSCC vegas reno core app
+DIRS = QoSCC core app
 TARGETS = all clean install
 
 

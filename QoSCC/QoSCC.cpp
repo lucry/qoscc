@@ -184,11 +184,12 @@ void QoSCC::onACK(int32_t ack){
         m_iMinRTTinInterval = m_iRTT;
         m_LastRCTime = currtime;
         m_iLastSndSeqNo = m_iSndCurrSeqNo;
-    }else if (currtime - m_LastRCTime >= 10e6){
-        std::cout << "No action from agent for 2 seconds..." << endl;
-        std::cout << "m_iIDState: " << m_iIDState << " m_iIDAction: " << m_iIDAction << " currtime - m_LastRCTime: " << currtime - m_LastRCTime << " m_iRCInterval: " << m_iRCInterval << endl;
-        exit(0);
     }
+//    else if (currtime - m_LastRCTime >= 10e6){
+//        std::cout << "No action from agent for 2 seconds..." << endl;
+//        std::cout << "m_iIDState: " << m_iIDState << " m_iIDAction: " << m_iIDAction << " currtime - m_LastRCTime: " << currtime - m_LastRCTime << " m_iRCInterval: " << m_iRCInterval << endl;
+//        exit(0);
+//    }
 
 
 

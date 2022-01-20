@@ -12,7 +12,6 @@
 #include <udt.h>
 #include "cc.h"
 #include "test_util.h"
-#include "../cubic/cubic.h"
 #include "../QoSCC/QoSCC.h"
 #include <sys/stat.h>
 #include <time.h>

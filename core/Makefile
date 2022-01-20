@@ -30,7 +30,7 @@ ifeq ($(arch), AMD64)
    CCFLAGS += -DAMD64
 endif
 
-OBJS = ../cubic/cubic.o ../cubic/tcp_cubic.o ../QoSCC/QoSCC.o ../reno/reno.o ../vegas/vegas.o ../vegas/tcp_vegas.o ../tcpabstract/tcpabstract.o api.o buffer.o cache.o ccc.o channel.o common.o core.o epoll.o list.o md5.o packet.o queue.o window.o ccc.o
+OBJS = ../QoSCC/QoSCC.o api.o buffer.o cache.o ccc.o channel.o common.o core.o epoll.o list.o md5.o packet.o queue.o window.o ccc.o
 DIR = $(shell pwd)
 
 all: libudt.so libudt.a udt
